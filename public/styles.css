@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&family=Caveat:wght@500&display=swap');
+ 
+:root {
+    --navy-deep: #080b1f;
+    --navy-mid: #131a3d;
+    --navy-soft: #1c2550;
+    --indigo-glow: #4b3aa8;
+    --sky-blue: #6fb3e8;
+    --moon-white: #f2efe7;
+    --gold-pin: #d9c18f;
+ 
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Inter', sans-serif;
+    --font-script: 'Caveat', cursive;
+}
+ 
+* {
+    box-sizing: border-box;
+}
+ 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+ 
+body {
+    background: radial-gradient(ellipse 120% 80% at 70% -10%, var(--indigo-glow) 0%, transparent 55%),
+                var(--navy-deep);
+    font-family: var(--font-body);
+    color: var(--moon-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+ 
+/* Drifting starfield */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+   background-image:
+        radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1.5px 1.5px at 60% 70%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 80% 20%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 35% 85%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 10% 65%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 75% 90%, rgba(255,255,255,0.5), transparent);
+    background-size: 100% 100%;
+    animation: twinkle 6s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+ 
+@keyframes twinkle {
+    from { opacity: 0.5; }
+    to   { opacity: 1; }
+}
+ 
+.hidden {
+    display: none !important;
+}
+ 
+/* ---------- Setup view: the "porthole" bubble ---------- */
+ 
+#setup-view {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+ 
+#setup-view::before {
+    /* faint horizon glow beneath the bubble, echoing the moonlit sea */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(111, 179, 232, 0.08), transparent);
+    pointer-events: none;
+}
+ 
+.bubble-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 56px 44px;
+    border-radius: 28px;
+    text-align: center;
+    background: linear-gradient(160deg, var(--navy-mid), var(--navy-soft));
+    border: 1px solid rgba(111, 179, 232, 0.12);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.55),
+        0 0 40px 6px rgba(233, 249, 255, 0.35),
+        0 0 90px 24px rgba(129, 195, 255, 0.35),
+        0 0 150px 50px rgba(106, 90, 224, 0.30);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+ 
+.bubble-card:hover,
+.bubble-card:focus-within {
+    transform: scale(1.035) translateY(-4px);
+    box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.6),
+        0 0 55px 10px rgba(233, 240, 255, 0.45),
+        0 0 120px 34px rgba(129, 195, 255, 0.45),
+        0 0 190px 65px rgba(106, 90, 224, 0.38);
+}
+ 
+
+.bubble-card h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.9rem;
+    line-height: 1.25;
+    margin: 0 0 32px;
+    color: var(--moon-white);
+    letter-spacing: 0.01em;
+}
+ 
+#ical-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+ 
+#ical-url {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(242, 239, 231, 0.18);
+    background: rgba(8, 11, 31, 0.55);
+    color: var(--moon-white);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+ 
+#ical-url::placeholder {
+    color: rgba(242, 239, 231, 0.4);
+}
+ 
+#ical-url:focus {
+    border-color: var(--sky-blue);
+    box-shadow: 0 0 0 3px rgba(111, 179, 232, 0.18);
+}
+ 
+#ical-form button {
+    padding: 13px 18px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, var(--sky-blue), #4f8fd1);
+    color: var(--navy-deep);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+ 
+#ical-form button:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 8px 24px -6px rgba(111, 179, 232, 0.6);
+}
+ 
+#ical-form button:active {
+    transform: translateY(1px) scale(0.98);
+}
+ 
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        animation: none;
+    }
+    .bubble-card,
+    #ical-form button {
+        transition: none;
+    }
+}
+ 
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    width: 100%;
+    max-width: 1200px; /* Prevents it from looking ridiculously stretched on giant desktop monitors */
+    
+    margin: 0 auto;    /* Centers the calendar on the page */
+}
+.day-cell {
+    border: 1px solid #ddd;
+    padding: 10px;
+    
+    background-color: #f9f9f9;
+    cursor: pointer;
+    /* ADDED: Keeps the cells perfectly square as they scale with the screen */
+    aspect-ratio: 1 / 1;
+    /* CHANGED: Replaced 'text-align: center' with Flexbox for precise placement */
+    display: flex;
+    justify-content: flex-end; /* Pushes the text to the right side */
+    align-items: flex-start;   /* Pushes the text to the top */
+}
+.greyed-out {
+    color: #ccc;
+    background-color: #f0f0f0;
+}
+.hidden {
+    display: none !important;
+}

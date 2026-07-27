@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Reading AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <section id="setup-view">
+    <div class="bubble-card">
+        
+        <h2>Paste your Cambridge iCal URL to sync your lectures</h2>
+        <form id="ical-form">
+            <input type="url" id="ical-url" placeholder="https://timetable.cam.ac.uk/…" required />
+            <button type="submit">Sync Calendar</button>
+        </form>
+    </div>
+    </section>
+
+
+    <section id="calendar-view" class="hidden">
+        <header class="calendar-header">
+            <h1 id="month-year-label">May 2026</h1>
+            <div class="nav-controls">
+                <button id="prev-month">&lt;</button>
+                <button id="today-btn">Today</button>
+                <button id="next-month">&gt;</button>
+            </div>
+        </header>
+
+        <div class="weekdays-grid">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+
+        <div class="calendar-grid" id="calendar"></div>
+    </section>
+
+    <dialog id="lectureModal">
+        <h3 id="modalDate">Lectures</h3>
+        <ul id="lectureList"></ul>
+        <button id="closeModal">Close</button>
+    </dialog>
+
+    <script src="calendar.js"></script>
+</body>
+</html>
