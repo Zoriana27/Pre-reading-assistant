@@ -23,6 +23,8 @@ app.post('/timetable', async (req, res) => {
         return res.status(400).json({status: 'error', message: 'URL is required'})
     }
     try{
+        course_dates.clear();
+        date_courses.clear();
         const events = await ical.async.fromURL(url);
         for (const event of Object.values(events)) {
             if(event.type == 'VEVENT'){
@@ -42,14 +44,16 @@ app.post('/timetable', async (req, res) => {
                 }
         
             }
-            for(const course of course_dates.keys()){
-                course_dates.get(course).sort();
-            }
+            
     
         };
+        for(const course of course_dates.keys()){
+                course_dates.get(course).sort();
+            }
         res.json({          
             status:'success',
-            eventsByDate: Object.fromEntries(date_courses)
+            eventsByDate: Object.fromEntries(date_courses),
+            courseLectures: Object.fromEntries(course_dates)
         });
 
 
@@ -58,11 +62,29 @@ app.post('/timetable', async (req, res) => {
         console.error('Error fetching or parsing iCal:', err);
         res.status(500).json({status: 'error', message: 'Failed to fetch or parse iCal URL.'});
     }
-    
-
-   
-    
 })
+
+app.post('/upload-lecture', upload.single('lectureSlides'), async (req, res) => {
+    const { course, lectureIndex, lectureDate } = req.body;
+    if (!req.file) {
+        return res.status(400).json({ status: 'error', message: 'No file uploaded.' });
+    }
+
+    try {
+        const lectureText = await parsePdf(req.file.path);
+        res.json({
+            status: 'success',
+            course,
+            lectureIndex,
+            lectureDate,
+            text: lectureText
+        });
+    } catch (error) {
+        console.error('Error processing lecture upload:', error);
+        res.status(500).json({ status: 'error', message: 'Failed to process uploaded PDF.' });
+    }
+});
+
 app.get('/lectures-for-date', (req, res) => {
     const dateRequired = req.query.date;
     /*For a GET request, data travels in the URL itself as query parameters, appended after a ?, 

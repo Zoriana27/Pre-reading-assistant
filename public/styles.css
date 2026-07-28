@@ -174,7 +174,91 @@ body::before {
 #ical-form button:active {
     transform: translateY(1px) scale(0.98);
 }
- 
+
+#upload-view {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.upload-card {
+    width: 100%;
+    max-width: 1080px;
+    padding: 56px 48px;
+}
+
+.upload-copy {
+    margin-top: 12px;
+    margin-bottom: 24px;
+    color: rgba(242, 239, 231, 0.7);
+    line-height: 1.5;
+}
+
+.course-upload-card {
+    margin-bottom: 28px;
+    padding: 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.course-upload-header {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.lecture-row {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.lecture-item {
+    min-width: 220px;
+    flex: 0 0 auto;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lecture-item h4 {
+    margin: 0 0 8px;
+    font-size: 0.98rem;
+}
+
+.lecture-item p {
+    margin: 0 8px 12px;
+    color: rgba(242, 239, 231, 0.75);
+}
+
+.lecture-item input[type="file"] {
+    width: 100%;
+}
+
+.lecture-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: rgba(242, 239, 231, 0.75);
+}
+
+#upload-done-btn {
+    margin-top: 24px;
+    padding: 14px 20px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, var(--sky-blue), #4f8fd1);
+    color: var(--navy-deep);
+    font-weight: 600;
+    cursor: pointer;
+}
+
 @media (prefers-reduced-motion: reduce) {
     body::before {
         animation: none;
@@ -185,6 +269,22 @@ body::before {
     }
 }
  
+.weekdays-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 12px;
+}
+
+.weekdays-grid > * {
+    padding: 10px 8px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--moon-white);
+}
+
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -198,7 +298,7 @@ body::before {
     border: 1px solid #ddd;
     padding: 10px;
     
-    background-color: #f9f9f9;
+    background-color: var(--navy-mid);
     cursor: pointer;
     /* ADDED: Keeps the cells perfectly square as they scale with the screen */
     aspect-ratio: 1 / 1;
@@ -209,7 +309,7 @@ body::before {
 }
 .greyed-out {
     color: #ccc;
-    background-color: #f0f0f0;
+    background-color: var(--navy-deep);
 }
 .hidden {
     display: none !important;

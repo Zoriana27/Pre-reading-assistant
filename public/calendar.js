@@ -1,6 +1,11 @@
 const icalForm = document.getElementById('ical-form');
 const setupView = document.getElementById('setup-view');
+const uploadView = document.getElementById('upload-view');
 const calendarView = document.getElementById('calendar-view');
+const courseUploadList = document.getElementById('course-upload-list');
+const uploadDoneBtn = document.getElementById('upload-done-btn');
+
+let currentEventsByDate = {};
 
 icalForm.addEventListener('submit', async (e) => {
     e.preventDefault(); //Stop page reload
@@ -14,9 +19,10 @@ icalForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if(data.status === 'success'){
+            currentEventsByDate = data.eventsByDate || {};
             setupView.classList.add('hidden');
-            calendarView.classList.remove('hidden');
-            renderCalendar(2025, 10, data.eventsByDate);
+            uploadView.classList.remove('hidden');
+            renderUploadView(data.courseLectures || {});
         }else{
             alert('Failed to process calendar URL.');
         }
@@ -25,6 +31,84 @@ icalForm.addEventListener('submit', async (e) => {
         alert('Could not connect to server.');
     }
 })
+
+uploadDoneBtn.addEventListener('click', () => {
+    uploadView.classList.add('hidden');
+    calendarView.classList.remove('hidden');
+    renderCalendar(2026, 4, currentEventsByDate);
+});
+
+function renderUploadView(courseLectures = {}) {
+    courseUploadList.innerHTML = '';
+
+    Object.entries(courseLectures).forEach(([course, dates]) => {
+        const courseCard = document.createElement('div');
+        courseCard.className = 'course-upload-card';
+
+        const header = document.createElement('div');
+        header.className = 'course-upload-header';
+        header.textContent = course;
+        courseCard.appendChild(header);
+
+        const lectureRow = document.createElement('div');
+        lectureRow.className = 'lecture-row';
+
+        dates.forEach((dateString, index) => {
+            const lectureItem = document.createElement('div');
+            lectureItem.className = 'lecture-item';
+            lectureItem.innerHTML = `
+                <h4>Lecture ${index + 1}</h4>
+                <p>${new Date(dateString).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })}</p>
+                <input type="file" accept=".pdf" data-course="${encodeURIComponent(course)}" data-lecture-index="${index}" data-lecture-date="${dateString}" />
+                <div class="lecture-status">No file chosen</div>
+            `;
+            lectureRow.appendChild(lectureItem);
+        });
+
+        courseCard.appendChild(lectureRow);
+        courseUploadList.appendChild(courseCard);
+    });
+
+    attachUploadListeners();
+}
+
+function attachUploadListeners() {
+    const fileInputs = courseUploadList.querySelectorAll('input[type="file"]');
+
+    fileInputs.forEach(input => {
+        input.addEventListener('change', async (event) => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            const lectureItem = event.target.closest('.lecture-item');
+            const statusEl = lectureItem.querySelector('.lecture-status');
+            statusEl.textContent = 'Uploading...';
+
+            const formData = new FormData();
+            formData.append('lectureSlides', file);
+            formData.append('course', decodeURIComponent(event.target.dataset.course));
+            formData.append('lectureIndex', event.target.dataset.lectureIndex);
+            formData.append('lectureDate', event.target.dataset.lectureDate);
+
+            try {
+                const uploadResponse = await fetch('/upload-lecture', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await uploadResponse.json();
+                if (result.status === 'success') {
+                    statusEl.textContent = 'Uploaded successfully';
+                } else {
+                    statusEl.textContent = 'Upload failed';
+                }
+            } catch (uploadError) {
+                console.error('Lecture upload failed:', uploadError);
+                statusEl.textContent = 'Upload failed';
+            }
+        });
+    });
+}
+
 // Function to generate the 42 calendar cell objects
 function generateCalendarCells(year, month) {
     // Convert JS Sunday-start (0) to Monday-start (0)

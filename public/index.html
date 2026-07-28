@@ -18,6 +18,14 @@
     </div>
     </section>
 
+    <section id="upload-view" class="hidden">
+        <div class="bubble-card upload-card">
+            <h2>Upload PDFs for each lecture</h2>
+            <p class="upload-copy">Select a PDF for each numbered lecture below. Uploads happen automatically when you choose a file.</p>
+            <div id="course-upload-list"></div>
+            <button id="upload-done-btn" type="button">Continue to calendar</button>
+        </div>
+    </section>
 
     <section id="calendar-view" class="hidden">
         <header class="calendar-header">
@@ -30,7 +38,13 @@
         </header>
 
         <div class="weekdays-grid">
-            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            <div>Sun</div>
         </div>
 
         <div class="calendar-grid" id="calendar"></div>
