@@ -5,18 +5,17 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS courses(
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
-    lecture_count INTEGER NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS lectures(
-    id INTEGER AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     course_id TEXT NOT NULL,
+    lecture_number INTEGER NOT NULL,
     start_time TEXT NOT NULL,
-    content_id TEXT,
     pdf_text TEXT,
     summary TEXT,
-    PRIMARY KEY(id, course_id),
     FOREIGN KEY(course_id) REFERENCES courses(id)
+    UNIQUE(course_id, lecture_number)
     );
 
     CREATE INDEX IF NOT EXISTS idx_lectures_start_time ON lectures(START_TIME);

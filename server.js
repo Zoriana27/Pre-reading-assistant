@@ -5,6 +5,7 @@ const {PDFParse} = require('pdf-parse');
 const fs = require('fs/promises');
 const ical = require('node-ical');
 const Briefing = require('./generateBriefing');
+const db = require('./db.js');
 
 
 
